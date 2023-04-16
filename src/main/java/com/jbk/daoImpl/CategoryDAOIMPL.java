@@ -97,7 +97,7 @@ public class CategoryDAOIMPL implements CategoryDAO{
 			
 			Transaction tr = session.beginTransaction();
 			
-			Category category =getCategoryById(categoryId);  //this is the method we created above , here we are calling a method from method 
+			Category category =session.get(Category.class,categoryId);  //this is the method we created above , here we are calling a method from method 
 		
 			if(category != null) {
 				

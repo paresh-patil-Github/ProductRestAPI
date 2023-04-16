@@ -34,6 +34,7 @@ public class ProductServiceIMPL implements ProductService{
 	public Product getProductById(String productid) {
 		
 		Product product=dao.getProductById(productid);
+		
 		return product;
 	}
 
@@ -63,25 +64,25 @@ public class ProductServiceIMPL implements ProductService{
 
 	@Override
 	public List<Product> sortProductsByName_DESC() {
-		// TODO Auto-generated method stub
+		
 		return dao.sortProductsByName_DESC();
 	}
 
 	@Override
-	public Product getMaxPriceProducts() {
-		// TODO Auto-generated method stub
+	public List<Product> getMaxPriceProducts() {
+		
 		return dao.getMaxPriceProducts();
 	}
 
 	@Override
 	public Double countSumOfProductPrice() {
-		// TODO Auto-generated method stub
+		
 		return dao.countSumOfProductPrice();
 	}
 
 	@Override
 	public long getTotalCountOfProduct() {
-		// TODO Auto-generated method stub
+		
 		return dao.getTotalCountOfProduct();
 	}
 

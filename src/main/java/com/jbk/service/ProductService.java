@@ -24,7 +24,7 @@ public interface ProductService {
 	
 	public List<Product> sortProductsByName_DESC();
 	
-	public Product getMaxPriceProducts();
+	public List<Product> getMaxPriceProducts();
 	
 	public Double countSumOfProductPrice();
 	

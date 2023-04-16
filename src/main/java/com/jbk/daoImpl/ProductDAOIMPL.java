@@ -8,6 +8,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -129,8 +131,9 @@ public class ProductDAOIMPL implements ProductDAO{
 			
 			Transaction tr = session.beginTransaction();
 			
-			Product product =getProductById(productid);  //this is the method we created above , here we are calling a method from method 
-		
+			//Product product =getProductById(productid);  //this is the method we created above , here we are calling a method from method 
+			//above getProductById method was detached to the session so below we use get method over same session as that of delete
+			Product product = session.get(Product.class, productid);
 			if(product != null) {
 				
 				session.delete(product);
@@ -184,8 +187,9 @@ public class ProductDAOIMPL implements ProductDAO{
 
 	@Override
 	public List<Product> sortProductsById_ASC() {
-		// TODO Auto-generated method stub
+		
 		return null;
+	
 	}
 
 	@Override
@@ -195,19 +199,84 @@ public class ProductDAOIMPL implements ProductDAO{
 	}
 
 	@Override
-	public Product getMaxPriceProducts() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Product> getMaxPriceProducts() {
+		
+		Session session= null ;
+		
+		List<Product> list = null;
+		
+		try {
+			double maxPrice = getMaxPrice();
+			
+			if(maxPrice > 0) {
+				
+			session= sf.openSession();
+			
+			Criteria criteria = session.createCriteria(Product.class);
+			
+			criteria.add(Restrictions.eq("productPrice", maxPrice));
+			
+			list = criteria.list();
+			}
+			
+		}catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}finally {
+			
+			if(session != null) {
+				
+				session.close();
+			}
+		}
+		
+		return list;
 	}
-
-	@Override
-	public Double countSumOfProductPrice() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public long getTotalCountOfProduct() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public double getMaxPrice() {
+		Session session= null;
+		
+		List<Double> list = null;
+		
+		double maxPrice=0;
+		
+		try {
+			session = sf.openSession();
+			
+			Criteria criteria =session.createCriteria(Product.class);
+			
+			criteria.setProjection(Projections.max("productprice"));
+			
+			list=criteria.list();  
+			
+			if(!list.isEmpty()) {     //if there are no product , list is empty we will get null pointer exception so we add if condition 
+			
+				maxPrice = list.get(0);
+			}
+		}catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}finally {
+			
+			if(session != null) {
+				session.close();
+			}
+		}
+		return maxPrice;
+	}
+
+	@Override
+	public double countSumOfProductPrice() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

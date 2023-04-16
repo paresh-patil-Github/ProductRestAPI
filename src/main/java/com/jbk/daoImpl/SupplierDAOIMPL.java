@@ -70,7 +70,7 @@ public class SupplierDAOIMPL implements SupplierDao{
 			
 			Transaction tr = session.beginTransaction();
 			
-			Supplier supplier =getSupplierById(supplierId);  //this is the method we created above , here we are calling a method from method 
+			Supplier supplier = session.get(Supplier.class, supplierId); 
 		
 			if(supplier != null) {
 				

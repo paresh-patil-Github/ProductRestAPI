@@ -20,9 +20,11 @@ public interface ProductDAO {
 	
 	public List<Product> sortProductsByName_DESC();
 	
-	public Product getMaxPriceProducts();
+	public double getMaxPrice();
 	
-	public Double countSumOfProductPrice();
+	public List<Product> getMaxPriceProducts();
+	
+	public double countSumOfProductPrice();
 	
 	public long getTotalCountOfProduct();
 	

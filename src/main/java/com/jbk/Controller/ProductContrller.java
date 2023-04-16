@@ -7,10 +7,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jbk.entity.Product;
@@ -48,11 +50,19 @@ public class ProductContrller {
 		
 	}
 	
-	@GetMapping(value="/get-Product-By-Id")
-	public ResponseEntity<Product> getProductById(String productid){
-		Product product=service.getProductById(productid);
-		return new ResponseEntity<Product>(product, HttpStatus.OK);
+	@GetMapping(value="/get-Product-By-Id/{productid}")
+	public ResponseEntity<Product> getProductById(@PathVariable String productid){
 		
+		Product product=service.getProductById(productid);
+		
+		if(product!= null) { 
+			
+		return new ResponseEntity<Product>(product, HttpStatus.OK);     //to pass only body to frontend use ==>> return ResponseEntity.ok(product)
+		
+		}else {
+			
+			return new  ResponseEntity<Product>(HttpStatus.NO_CONTENT);  // NO_CONTENT means Api is working but there is no content to return  , here we dont have any thing to return so we don't pass the object 
+		}
 	}
 	
 	@GetMapping(value="/get-all-Products")
@@ -60,50 +70,122 @@ public class ProductContrller {
 		
 		List<Product> list =service.getAllProduct();
 		
-		 return new ResponseEntity<List<Product>>(list,HttpStatus.OK);
-		
+		if(list.isEmpty()) {
+			
+			 return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
+			 
+		} else {
+			
+			 return new ResponseEntity<List<Product>>(list,HttpStatus.OK);
+		}
 	}
 	
-	@DeleteMapping(value="/delete-Product")
-	public ResponseEntity<Boolean> deletProductById(String productid){
+	@DeleteMapping(value="/delete-Product-By-Id")
+	public ResponseEntity<Boolean> deletProductById(@RequestParam String productId){
 		
-		boolean isDeleted=service.deletProductById(productid);
+		boolean isDeleted=service.deletProductById(productId);
+		
+		if(isDeleted) {
 		
 		 return new ResponseEntity<Boolean>(isDeleted, HttpStatus.OK) ;
+		 
+		} else {
 		
+			 return new ResponseEntity<Boolean>(isDeleted, HttpStatus.NO_CONTENT);	
+		}
 	}
 	
 	@PutMapping(value="/update-Product")
-	public ResponseEntity<Boolean> updateProduct(Product product){
+	public ResponseEntity<Boolean> updateProduct(@RequestBody Product product){
 		
 		boolean isUpdated = service.updateProduct(product);
 		
+		if(isUpdated) {
+			
 		return  new ResponseEntity<Boolean>(isUpdated, HttpStatus.OK) ;
 		
+		} else {
+			
+			return  new ResponseEntity<Boolean>(isUpdated, HttpStatus.NO_CONTENT) ;
+		}
 	}
 	
-	public List<Product> sortProductsById_ASC(){
-		return null;
+	@GetMapping(value="/sort-Products-By-Id_ASC")
+	public ResponseEntity<List<Product>> sortProductsById_ASC(){
+		
+		List<Product> list= service.sortProductsById_ASC();
+		
+		if(list.isEmpty()) {
+			
+			return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
+		
+		}	 else {
+			
+			 return new ResponseEntity<List<Product>>(list,HttpStatus.OK);
+		}
 		
 	}
 	
-	public List<Product> sortProductsByName_DESC(){
-		return null;
+	@GetMapping(value="/sort-Products-By-Name_DESC")
+	public ResponseEntity<List<Product>> sortProductsByName_DESC(){
+		
+		List<Product> list= service.sortProductsByName_DESC();
+		
+		if(list.isEmpty()) {
+			
+			return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
+		
+		}	 else {
+			
+			 return new ResponseEntity<List<Product>>(list,HttpStatus.OK);
+		}
 		
 	}
 	
-	public Product getMacPriceProducts(){
-		return null;
+	@GetMapping(value="/get-max-pricep-roducts")
+	public ResponseEntity<List<Product>> getMaxPriceProducts(){
+		
+		List<Product> list= service.getMaxPriceProducts();
+		
+		if(list.isEmpty()) {
+			
+			return new ResponseEntity<List<Product>>(HttpStatus.NO_CONTENT);
+		
+		}	 else {
+			
+			 return new ResponseEntity<List<Product>>(list,HttpStatus.OK);
+		}
+		
 		
 	}
 	
-	public Double countSumOfProductPrice(){
-		return null;
+	public ResponseEntity<Double> countSumOfProductPrice(){
+		
+		double sumOfProductPrice=service.countSumOfProductPrice();
+		
+		if(sumOfProductPrice > 0) {
+			
+			return new ResponseEntity<Double>(sumOfProductPrice,HttpStatus.OK);
+		
+		}else {
+			
+			return new ResponseEntity<Double>(sumOfProductPrice,HttpStatus.NO_CONTENT);
+		}
 		
 	}
 	
-	public long getTotalCountOfProduct(){
-		return 0;
+	public ResponseEntity<Long> getTotalCountOfProduct(){
+		
+		long totalCountOfProduct =service.getTotalCountOfProduct();
+		
+		if(totalCountOfProduct > 0) {
+			
+			return new ResponseEntity<Long>(totalCountOfProduct,HttpStatus.OK);
+			
+		}else {
+			
+			return new ResponseEntity<Long>(totalCountOfProduct,HttpStatus.NO_CONTENT);
+		}
 		
 	}
 	
