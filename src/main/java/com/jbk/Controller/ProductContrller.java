@@ -159,6 +159,7 @@ public class ProductContrller {
 		
 	}
 	
+	@GetMapping(value="/get-count-Sum-Of-Product-Price")
 	public ResponseEntity<Double> countSumOfProductPrice(){
 		
 		double sumOfProductPrice=service.countSumOfProductPrice();
@@ -174,17 +175,18 @@ public class ProductContrller {
 		
 	}
 	
-	public ResponseEntity<Long> getTotalCountOfProduct(){
+	@GetMapping(value="/get-Total-Count-Of-Product")
+	public ResponseEntity<Integer> getTotalCountOfProduct(){
 		
-		long totalCountOfProduct =service.getTotalCountOfProduct();
+		int totalCountOfProduct =service.getTotalCountOfProduct();
 		
 		if(totalCountOfProduct > 0) {
 			
-			return new ResponseEntity<Long>(totalCountOfProduct,HttpStatus.OK);
+			return new ResponseEntity<Integer>(totalCountOfProduct,HttpStatus.OK);
 			
 		}else {
 			
-			return new ResponseEntity<Long>(totalCountOfProduct,HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Integer>(totalCountOfProduct,HttpStatus.NO_CONTENT);
 		}
 		
 	}

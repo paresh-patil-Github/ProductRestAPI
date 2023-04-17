@@ -28,6 +28,6 @@ public interface ProductService {
 	
 	public Double countSumOfProductPrice();
 	
-	public long getTotalCountOfProduct();
+	public int getTotalCountOfProduct();
 	
 }
