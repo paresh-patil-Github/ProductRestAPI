@@ -81,7 +81,7 @@ public class ProductServiceIMPL implements ProductService{
 	}
 
 	@Override
-	public long getTotalCountOfProduct() {
+	public int getTotalCountOfProduct() {
 		
 		return dao.getTotalCountOfProduct();
 	}

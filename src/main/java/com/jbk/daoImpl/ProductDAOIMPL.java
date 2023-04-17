@@ -8,6 +8,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projection;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -188,15 +190,103 @@ public class ProductDAOIMPL implements ProductDAO{
 	@Override
 	public List<Product> sortProductsById_ASC() {
 		
-		return null;
-	
+		Session session= null;
+		
+		List<Product> list = null;
+		
+		try {
+			session =sf.openSession();
+			
+			Criteria criteria =session.createCriteria(Product.class);
+			
+			criteria.addOrder(Order.asc("productId"));
+			
+			list =criteria.list();
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		} finally {
+			
+			if(session != null) {
+				
+				session.close();
+			}
+		}
+		
+		
+		return list;
 	}
+	
 
 	@Override
 	public List<Product> sortProductsByName_DESC() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		
+		Session session= null;
+		
+		List<Product> list = null;
+		
+		try {
+			session =sf.openSession();
+			
+			Criteria criteria =session.createCriteria(Product.class);
+			
+			criteria.addOrder(Order.desc("productName"));
+			
+			list =criteria.list();
+			
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		} finally {
+			
+			if(session != null) {
+				
+				session.close();
+			}
+		}
+		
+		
+		return list;	
+		}
+	
+	@Override
+	public double getMaxPrice() {
+		Session session= null;
+		
+		List<Double> list = null;
+		
+		double maxPrice=0;
+		
+		try {
+			session = sf.openSession();
+			
+			Criteria criteria =session.createCriteria(Product.class);
+			
+			criteria.setProjection(Projections.max("productprice"));
+			
+			list=criteria.list();  
+			
+			if(!list.isEmpty()) {     //if there are no product , list is empty we will get null pointer exception so we add if condition 
+			
+				maxPrice = list.get(0);
+			}
+		}catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		}finally {
+			
+			if(session != null) {
+				session.close();
+			}
+		}
+		return maxPrice;
 	}
+	
 
 	@Override
 	public List<Product> getMaxPriceProducts() {
@@ -236,32 +326,30 @@ public class ProductDAOIMPL implements ProductDAO{
 	
 
 	@Override
-	public long getTotalCountOfProduct() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public double getMaxPrice() {
-		Session session= null;
+	public int getTotalCountOfProduct() {
 		
-		List<Double> list = null;
+		Session session= null ;
 		
-		double maxPrice=0;
+		List<Integer> list = null;
+		
+		int totalProductCount =0;
 		
 		try {
-			session = sf.openSession();
 			
-			Criteria criteria =session.createCriteria(Product.class);
+			session= sf.openSession();
 			
-			criteria.setProjection(Projections.max("productprice"));
+			Criteria criteria = session.createCriteria(Product.class);
 			
-			list=criteria.list();  
+			criteria.setProjection(Projections.rowCount());
 			
-			if(!list.isEmpty()) {     //if there are no product , list is empty we will get null pointer exception so we add if condition 
+			list = criteria.list();
 			
-				maxPrice = list.get(0);
+			if(!list.isEmpty()) {
+				
+				totalProductCount =list.get(0);
+				
 			}
+			
 		}catch (Exception e) {
 			
 			e.printStackTrace();
@@ -269,16 +357,52 @@ public class ProductDAOIMPL implements ProductDAO{
 		}finally {
 			
 			if(session != null) {
+				
 				session.close();
 			}
 		}
-		return maxPrice;
+		
+		return totalProductCount;
 	}
+
 
 	@Override
 	public double countSumOfProductPrice() {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		
+		Session session= null;
+		
+		List<Double> list = null;
+		
+		double sumOfProductPrice= 0;
+		
+		try {
+			session =sf.openSession();
+			
+			Criteria criteria =session.createCriteria(Product.class);
+			
+			criteria.setProjection(Projections.sum("productPrice"));
+			
+			list =criteria.list();
+			
+			if(!list.isEmpty()) {
+				sumOfProductPrice=list.get(0);
+			}
+			 
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			
+		} finally { 
+			
+			if(session != null) {
+				
+				session.close();
+			}
+		}
+		
+		return sumOfProductPrice;
+		
 	}
 
 }

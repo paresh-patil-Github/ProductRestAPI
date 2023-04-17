@@ -26,7 +26,7 @@ public interface ProductDAO {
 	
 	public double countSumOfProductPrice();
 	
-	public long getTotalCountOfProduct();
+	public int getTotalCountOfProduct();
 	
 
 }
